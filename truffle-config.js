@@ -10,21 +10,13 @@ module.exports = {
       network_id: "*",       // Any network (default: none)
     },
     testnet: {
-      provider: () => new HDWalletProvider(mnemonic, `https://data-seed-prebsc-2-s1.binance.org:8545/`),
-      network_id: 97,
+      provider: () => new HDWalletProvider(mnemonic, `https://kovan4.arbitrum.io/rpc`),
+      network_id: 212984383488152,
       // confirmations: 10,
       // gasPrice:10000000000,
       timeoutBlocks: 200,
       skipDryRun: true
-    },
-    bsc: {
-      provider: () => new HDWalletProvider(mnemonic, `https://bsc-dataseed.binance.org/`),
-      network_id: 56,
-      gasPrice:10000000000,
-      // confirmations: 10,
-      timeoutBlocks: 200,
-      skipDryRun: true
-    },
+    }
   },
 
   // Set default mocha options here, use special reporters etc.
@@ -35,7 +27,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "^0.7.0",
+      version: "^0.6.0",
     }
   }
 }

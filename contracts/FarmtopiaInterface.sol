@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 contract FarmtopiaInterface is Ownable,ReentrancyGuard {
 
     using SafeMath for uint256;
-    address constant DAI_ADDRESS;
+    address constant DAI_ADDRESS = 0x59d141841328f89bF38672419655175F53740010;
     address fDAI_ADDRESS;
     uint256 public totalDeposit;
     uint256 public uninvestedAmount;
@@ -18,21 +18,21 @@ contract FarmtopiaInterface is Ownable,ReentrancyGuard {
         fDAI_ADDRESS = _fDai;
     }
 
-    function deposit(uint256 _amount) public nonentrant {
+    function deposit(uint256 _amount) public nonReentrant {
         require(fDAI_ADDRESS != address(0), "fToken not set");
-        FToken ftoken = fToken(fDAI_ADDRESS);
+        fToken ftoken = fToken(fDAI_ADDRESS);
         ERC20 token = ERC20(DAI_ADDRESS);
         token.transferFrom(msg.sender, address(this), _amount);
-        fToken.mintOnDeposit(msg.sender, _amount);
+        ftoken.mintOnDeposit(msg.sender, _amount);
         totalDeposit = token.balanceOf(address(this));
         uninvestedAmount = (totalDeposit.mul(2)).div(100);
     }
 
-    function withdraw(uint256 _fTokens) public nonentrant {
+    function withdraw(uint256 _fTokens) public nonReentrant {
         require(fDAI_ADDRESS != address(0), "fToken not set");
         require(_fTokens > 0);
         require(_fTokens <= uninvestedAmount);
-        FToken ftoken = fToken(fDAI_ADDRESS);
+        fToken ftoken = fToken(fDAI_ADDRESS);
         ERC20 token = ERC20(DAI_ADDRESS);
         ftoken.burnOnWithdraw(msg.sender, _fTokens);
         token.transfer(msg.sender,_fTokens);
